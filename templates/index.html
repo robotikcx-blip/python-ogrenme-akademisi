@@ -4,77 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Master Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #4e73df; --dark: #1a1c23; --light: #f8f9fc; --accent: #1cc88a; }
-        body { font-family: 'Nunito', sans-serif; background: #f0f2f5; margin: 0; display: flex; }
+        /* Genel Ayarlar */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-        /* Sol Menü */
-        .sidebar { width: 320px; background: var(--dark); height: 100vh; color: white; padding: 20px; box-shadow: 4px 0 10px rgba(0,0,0,0.1); position: sticky; top: 0; }
-        .sidebar h2 { color: var(--accent); font-size: 1.5rem; text-align: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        
-        .nav-btn { width: 100%; padding: 15px; margin-bottom: 10px; background: transparent; border: 1px solid #333; color: #ccc; text-align: left; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; }
-        .nav-btn i { margin-right: 10px; width: 20px; }
-        .nav-btn:hover, .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); transform: translateX(5px); }
+        /* Başlık Alanı */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
 
-        /* Sağ İçerik Alanı */
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        .welcome-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        
-        .topic-header { color: var(--primary); margin-bottom: 10px; font-size: 2rem; }
-        .topic-desc { color: #666; font-size: 1.1rem; margin-bottom: 30px; line-height: 1.6; background: #eef2ff; padding: 15px; border-left: 5px solid var(--primary); }
+        /* Ana İçerik Konteynırı */
+        .container {
+            display: flex;
+            flex: 1;
+            /* Mobilde alt alta gelmesi için: */
+            flex-wrap: wrap; 
+        }
 
-        /* Accordion (Açılır Detaylar) */
-        .sub-topic { background: white; margin-bottom: 15px; border-radius: 10px; border: 1px solid #ddd; overflow: hidden; }
-        .sub-header { background: #fff; padding: 20px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: #333; }
-        .sub-header:hover { background: #fafafa; }
-        
-        .sub-content { padding: 20px; border-top: 1px solid #eee; background: #fcfcfc; }
-        .code-block { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; white-space: pre-wrap; margin-top: 10px; border-left: 4px solid var(--accent); }
-        
-        .badge { background: var(--accent); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; }
+        /* Yan Menü */
+        nav {
+            background-color: #34495e;
+            color: white;
+            width: 250px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* İçerik Alanı */
+        main {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+            box-sizing: border-box;
+            min-width: 300px; /* Çok daralmasını engeller */
+        }
+
+        /* Kartlar veya Konu Kutuları */
+        .card {
+            background: #fff;
+            border-left: 5px solid #3498db;
+            margin-bottom: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* MOBİL UYUM (Responsive) AYARLARI */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Yan menüyü yukarı, içeriği aşağı alır */
+            }
+
+            nav {
+                width: 100%; /* Yan menü tüm genişliği kaplar */
+                text-align: center;
+            }
+
+            main {
+                width: 100%;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.5rem; /* Başlığı mobilde biraz küçültür */
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h2><i class="fa-brands fa-python"></i> Python Akademi</h2>
-        <form method="POST">
-            {% for konu in konular %}
-                <button type="submit" name="konu_adi" value="{{ konu }}" 
-                        class="nav-btn {% if konu == secilen %}active{% endif %}">
-                    <i class="fa-solid fa-chevron-right"></i> {{ konu }}
-                </button>
-            {% endfor %}
-        </form>
-    </div>
+<header>
+    <h1>Python Master Dashboard</h1>
+</header>
 
-    <div class="main-content">
-        {% if secilen %}
-            <div class="topic-header">{{ secilen }}</div>
-            <div class="topic-desc">{{ detaylar.Aciklama }}</div>
+<div class="container">
+    <nav>
+        <h3>Konular</h3>
+        <p>Değişkenler</p>
+        <p>Döngüler</p>
+        <p>Fonksiyonlar</p>
+    </nav>
 
-            {% for kalem in detaylar.Detaylar %}
-                <div class="sub-topic">
-                    <div class="sub-header">
-                        <span><i class="fa-solid fa-book-open"></i> {{ kalem.alt_baslik }}</span>
-                        <span class="badge">Örnekli Anlatım</span>
-                    </div>
-                    <div class="sub-content">
-                        <p>{{ kalem.icerik }}</p>
-                        <div class="code-block"># Örnek Kod Uygulaması:
-{{ kalem.kod }}</div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="welcome-card">
-                <h1>Merhaba Geleceğin Yazılımcısı! 👋</h1>
-                <p>Şu ana kadar öğrendiğin tüm konuları en ince ayrıntısına kadar incelemek için sol menüden bir başlık seç.</p>
-                <p>Her başlıkta <b>"aptala anlatır gibi"</b> basit açıklamalar ve kopyalayıp kullanabileceğin gerçek kod örnekleri bulacaksın.</p>
-            </div>
-        {% endif %}
-    </div>
+    <main>
+        <h2>Hoş Geldiniz!</h2>
+        <div class="card">
+            <h3>Neden Python?</h3>
+            <p>Python, öğrenmesi kolay ve çok güçlü bir dildir. Bu dashboard üzerinden tüm notlarına erişebilirsin.</p>
+        </div>
+        
+        <div class="card">
+            <h3>Hızlı Notlar</h3>
+            <p>Kodlarını GitHub'a yükleyip Render'da yayınlamayı başardın!</p>
+        </div>
+    </main>
+</div>
 
 </body>
 </html>
