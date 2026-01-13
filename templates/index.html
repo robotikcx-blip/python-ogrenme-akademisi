@@ -5,82 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Master Dashboard</title>
     <style>
-        /* Modern ve Mobil Uyumlu Tasarım */
         :root {
             --primary: #2c3e50;
-            --secondary: #34495e;
             --accent: #3498db;
-            --text: #ffffff;
+            --bg: #f8f9fa;
         }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            background-color: #f0f2f5;
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: #333; }
+        
+        header { background: var(--primary); color: white; padding: 20px; text-align: center; }
+        
+        .container { display: flex; flex-wrap: wrap; min-height: 90vh; }
+        
+        /* Yan Menü */
+        nav { 
+            background: #34495e; width: 280px; padding: 20px; box-sizing: border-box; 
         }
-
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        nav h3 { color: #ecf0f1; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        
+        /* Butonları Form Şekline Getirdik */
+        .menu-form { margin-bottom: 10px; }
+        .menu-btn {
+            width: 100%; background: rgba(255,255,255,0.1); border: none; color: white;
+            padding: 12px; text-align: left; cursor: pointer; border-radius: 6px;
+            font-size: 16px; transition: 0.3s;
         }
+        .menu-btn:hover { background: var(--accent); padding-left: 20px; }
+        .active { background: var(--accent) !important; font-weight: bold; }
 
-        .container {
-            display: flex;
-            flex-wrap: wrap; /* Mobilde alt alta geçmesini sağlar */
-        }
+        /* Ana İçerik */
+        main { flex: 1; padding: 30px; min-width: 320px; box-sizing: border-box; }
+        
+        .welcome-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        .topic-card { background: white; margin-top: 20px; padding: 20px; border-radius: 12px; border-left: 6px solid var(--accent); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        
+        code { background: #272822; color: #f8f8f2; padding: 15px; display: block; border-radius: 6px; overflow-x: auto; margin: 10px 0; font-family: 'Consolas', monospace; }
 
-        /* Yan Menü Ayarları */
-        nav {
-            background: var(--secondary);
-            width: 250px;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        nav h3 { color: var(--accent); border-bottom: 1px solid #444; padding-bottom: 10px; }
-
-        /* Buton Stilleri */
-        .nav-link {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            margin: 8px 0;
-            background: rgba(255,255,255,0.05);
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .nav-link:hover { background: var(--accent); }
-
-        /* Ana İçerik Alanı */
-        main {
-            flex: 1;
-            padding: 20px;
-            min-width: 300px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
-
-        /* MOBİL ÖZELLEŞTİRME */
+        /* Mobil Görünüm Ayarları */
         @media (max-width: 768px) {
-            nav {
-                width: 100%;
-                min-height: auto;
-            }
-            .container {
-                flex-direction: column;
-            }
+            .container { flex-direction: column; }
+            nav { width: 100%; min-height: auto; }
+            main { padding: 15px; }
+            header h1 { font-size: 20px; }
         }
     </style>
 </head>
@@ -92,24 +58,38 @@
 
 <div class="container">
     <nav>
-        <h3>Ders Menüsü</h3>
-        <a href="/" class="nav-link">🏠 Ana Sayfa</a>
-        <a href="/degiskenler" class="nav-link">📦 Değişkenler</a>
-        <a href="/donguler" class="nav-link">🔁 Döngüler</a>
-        <a href="/fonksiyonlar" class="nav-link">⚙️ Fonksiyonlar</a>
+        <h3>📌 Konu Listesi</h3>
+        {% for konu in konular %}
+        <form action="/" method="post" class="menu-form">
+            <input type="hidden" name="konu_adi" value="{{ konu }}">
+            <button type="submit" class="menu-btn {% if konu == secilen %}active{% endif %}">
+                {{ konu }}
+            </button>
+        </form>
+        {% endfor %}
     </nav>
 
     <main>
-        <div class="card">
-            <h2>Hoş Geldin!</h2>
-            <p>Burada Python öğrenirken aldığın notları görebilirsin. Sol taraftaki menüyü kullanarak konular arasında gezinebilirsin.</p>
+        {% if not secilen %}
+        <div class="welcome-card">
+            <h2>Hoş Geldin! 👋</h2>
+            <p>Python dünyasını keşfetmek için soldaki (mobilde yukarıdaki) menüden bir konu seçebilirsin.</p>
+            <p>Her konu başlığında detaylı açıklamalar ve örnek kodlar seni bekliyor.</p>
+        </div>
+        {% else %}
+        <div class="welcome-card">
+            <h2>{{ secilen }}</h2>
+            <p><i>{{ detaylar.Aciklama }}</i></p>
         </div>
 
-        <div class="card" style="border-left: 5px solid var(--accent);">
-            <h3>Günün Notu</h3>
-            <code>print("Merhaba Dünya")</code>
-            <p>Yukarıdaki kod ekrana yazı yazdırmanı sağlar.</p>
+        {% for detay in detaylar.Detaylar %}
+        <div class="topic-card">
+            <h4>🔹 {{ detay.alt_baslik }}</h4>
+            <p>{{ detay.icerik }}</p>
+            <code>{{ detay.kod }}</code>
         </div>
+        {% endfor %}
+        {% endif %}
     </main>
 </div>
 
