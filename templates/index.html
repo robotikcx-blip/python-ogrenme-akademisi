@@ -5,78 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Master Dashboard</title>
     <style>
-        /* Genel Ayarlar */
+        /* Modern ve Mobil Uyumlu Tasarım */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
+            --text: #ffffff;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f4f7f6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            background-color: #f0f2f5;
         }
 
-        /* Başlık Alanı */
         header {
-            background-color: #2c3e50;
+            background: var(--primary);
             color: white;
-            padding: 20px;
+            padding: 1rem;
             text-align: center;
-        }
-
-        /* Ana İçerik Konteynırı */
-        .container {
-            display: flex;
-            flex: 1;
-            /* Mobilde alt alta gelmesi için: */
-            flex-wrap: wrap; 
-        }
-
-        /* Yan Menü */
-        nav {
-            background-color: #34495e;
-            color: white;
-            width: 250px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        /* İçerik Alanı */
-        main {
-            flex: 1;
-            padding: 20px;
-            background-color: white;
-            box-sizing: border-box;
-            min-width: 300px; /* Çok daralmasını engeller */
-        }
-
-        /* Kartlar veya Konu Kutuları */
-        .card {
-            background: #fff;
-            border-left: 5px solid #3498db;
-            margin-bottom: 15px;
-            padding: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* MOBİL UYUM (Responsive) AYARLARI */
+        .container {
+            display: flex;
+            flex-wrap: wrap; /* Mobilde alt alta geçmesini sağlar */
+        }
+
+        /* Yan Menü Ayarları */
+        nav {
+            background: var(--secondary);
+            width: 250px;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        nav h3 { color: var(--accent); border-bottom: 1px solid #444; padding-bottom: 10px; }
+
+        /* Buton Stilleri */
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover { background: var(--accent); }
+
+        /* Ana İçerik Alanı */
+        main {
+            flex: 1;
+            padding: 20px;
+            min-width: 300px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        /* MOBİL ÖZELLEŞTİRME */
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column; /* Yan menüyü yukarı, içeriği aşağı alır */
-            }
-
             nav {
-                width: 100%; /* Yan menü tüm genişliği kaplar */
-                text-align: center;
-            }
-
-            main {
                 width: 100%;
-                padding: 10px;
+                min-height: auto;
             }
-
-            h1 {
-                font-size: 1.5rem; /* Başlığı mobilde biraz küçültür */
+            .container {
+                flex-direction: column;
             }
         }
     </style>
@@ -84,27 +87,28 @@
 <body>
 
 <header>
-    <h1>Python Master Dashboard</h1>
+    <h1>🐍 Python Öğrenme Akademisi</h1>
 </header>
 
 <div class="container">
     <nav>
-        <h3>Konular</h3>
-        <p>Değişkenler</p>
-        <p>Döngüler</p>
-        <p>Fonksiyonlar</p>
+        <h3>Ders Menüsü</h3>
+        <a href="/" class="nav-link">🏠 Ana Sayfa</a>
+        <a href="/degiskenler" class="nav-link">📦 Değişkenler</a>
+        <a href="/donguler" class="nav-link">🔁 Döngüler</a>
+        <a href="/fonksiyonlar" class="nav-link">⚙️ Fonksiyonlar</a>
     </nav>
 
     <main>
-        <h2>Hoş Geldiniz!</h2>
         <div class="card">
-            <h3>Neden Python?</h3>
-            <p>Python, öğrenmesi kolay ve çok güçlü bir dildir. Bu dashboard üzerinden tüm notlarına erişebilirsin.</p>
+            <h2>Hoş Geldin!</h2>
+            <p>Burada Python öğrenirken aldığın notları görebilirsin. Sol taraftaki menüyü kullanarak konular arasında gezinebilirsin.</p>
         </div>
-        
-        <div class="card">
-            <h3>Hızlı Notlar</h3>
-            <p>Kodlarını GitHub'a yükleyip Render'da yayınlamayı başardın!</p>
+
+        <div class="card" style="border-left: 5px solid var(--accent);">
+            <h3>Günün Notu</h3>
+            <code>print("Merhaba Dünya")</code>
+            <p>Yukarıdaki kod ekrana yazı yazdırmanı sağlar.</p>
         </div>
     </main>
 </div>
